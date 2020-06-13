@@ -1,0 +1,31 @@
+<configuration debug="true" scan="true" scanPeriod="15 seconds">
+
+	<property name="LOG_FILE" value="logs/application" />
+
+	<appender name="FILE-ROLLING"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_FILE}.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd}.gz</fileNamePattern>
+
+			<!-- keep 30 days' worth of history capped at 3GB total size -->
+			<maxHistory>30</maxHistory>
+			<totalSizeCap>1GB</totalSizeCap>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d %p %c{1.} [%t] %m%n</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="com.example" level="debug" additivity="true">
+		<appender-ref ref="FILE-ROLLING" />
+	</logger>
+	<logger name="com.example" level="trace" additivity="true">
+		<appender-ref ref="FILE-ROLLING" />
+	</logger>
+
+	<root level="error">
+		<appender-ref ref="FILE-ROLLING" />
+	</root>
+</configuration>
